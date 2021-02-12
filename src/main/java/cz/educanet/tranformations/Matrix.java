@@ -1,7 +1,5 @@
 package cz.educanet.tranformations;
 
-import kotlin.NotImplementedError;
-
 import java.util.Arrays;
 
 public class Matrix implements IMatrix {
@@ -27,22 +25,44 @@ public class Matrix implements IMatrix {
 
     @Override
     public IMatrix times(IMatrix matrix) {
-        throw new NotImplementedError(); // TODO:
+        double[][] newArray = new double[rawArray.length][matrix.getColumns()];
+
+        if (rawArray.length != matrix.getColumns())
+        {
+            throw new ArithmeticException();
+        }
+        else
+        for (int i=0; i < rawArray.length; ++i)
+            for (int j=0; j < matrix.getColumns(); ++j)
+                for (int k=0; k < rawArray[0].length; ++k)
+                    newArray[i][j] += rawArray[i][k] * matrix.get(k, j);
+
+        return new Matrix(newArray);
+
     }
 
     @Override
     public IMatrix times(Number scalar) {
-        throw new NotImplementedError(); // TODO:
+        return new Matrix(Arrays.stream(rawArray).map(double[]::clone)
+                .map(x -> Arrays.stream(x).map(y -> y * scalar.doubleValue()).toArray())
+                .toArray(double[][]::new));
     }
 
     @Override
     public IMatrix add(IMatrix matrix) {
-        throw new NotImplementedError(); // TODO:
+        double[][] newArray = Arrays.stream(rawArray).map(double[]::clone).toArray(double[][]::new);
+
+        for (int x = 0; x < rawArray.length; x++)
+            for (int y = 0; y < rawArray[x].length; y++)
+                newArray[x][y] += matrix.get(x, y);
+        System.out.println(Arrays.deepToString(newArray));
+
+        return new Matrix(newArray);
     }
 
     @Override
     public double get(int n, int m) {
-        throw new NotImplementedError(); // TODO:
+        return rawArray[n][m];
     }
 
     //region Optional
@@ -55,6 +75,7 @@ public class Matrix implements IMatrix {
     public double determinant() {
         return 0;
     }
+
     //endregion
     //region Generated
     @Override

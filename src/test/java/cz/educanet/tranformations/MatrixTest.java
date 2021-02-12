@@ -1,6 +1,5 @@
 package cz.educanet.tranformations;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -61,21 +60,30 @@ public class MatrixTest {
         assertEquals(2, d.getColumns());
     }
 
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void add() {
+        assertEquals(2, a.add(b).get(0,1 ), 0.1);
+        assertEquals(2, a.add(d).get(0,1 ), 0.1);
+    }
+
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    public void get() {
+        assertEquals(1, a.get(0,0),0.1);
+        assertEquals(1, a.get(0,20),0.1);
+    }
+
     @Test
     public void times() {
+        assertEquals(15, a.times(15).get(0,0), 0.1);
     }
 
-    @Test
+    @Test(expected = ArithmeticException.class)
     public void timesScalar() {
+        assertEquals(0, a.times(b).get(0,0), 0.1);
+        assertEquals(1, b.times(c).get(0,0), 0.1);
     }
 
-    @Test
-    public void add() {
-    }
-
-    @Test
-    public void get() {
-    }
 
     @Test
     public void transpose() {
